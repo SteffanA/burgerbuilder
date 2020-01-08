@@ -16,3 +16,8 @@
 .Toolbar nav {
     height: 100%;
 }
+
+/* Define Logo outside of the class to override the height for non-mobile */
+.Logo {
+    height: 80%;
+}

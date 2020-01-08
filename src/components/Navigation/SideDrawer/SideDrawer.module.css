@@ -26,3 +26,8 @@
 .Close {
     transform: translateX(-100%); /* shift left */
 }
+
+/* Define Logo outside of the class to override the height for mobile */
+.Logo {
+    height: 11%;
+}
