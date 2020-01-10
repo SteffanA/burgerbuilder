@@ -30,4 +30,5 @@
 /* Define Logo outside of the class to override the height for mobile */
 .Logo {
     height: 11%;
+    margin-bottom: 32px;
 }
