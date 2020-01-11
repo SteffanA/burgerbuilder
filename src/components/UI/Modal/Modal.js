@@ -10,7 +10,8 @@ class Modal extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         // If state could change in Modal, we would also want to
         // check other things. RN this is okay
-        if (nextProps.show !== this.props.show) {
+        // We should also update if we get new children
+        if (nextProps.show !== this.props.show || nextProps.children !== this.props.children) {
             return true;
         }
         return false;
