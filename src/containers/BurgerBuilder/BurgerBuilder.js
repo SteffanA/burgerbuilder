@@ -17,16 +17,24 @@ const INGREDIENT_PRICES = {
  }
 class BurgerBuilder extends Component {
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0,
-        },
+        ingredients: null,
         totalPrice: 4,
         purchaseable: false,
         purchasing: false,
         loading: false,
+        error: false
+    }
+
+    componentDidMount() {
+        // Get our ingredients list dynamically from our database when we
+        // mount the burger builder
+        axios.get('/ingredients.json')
+            .then(response => {
+                this.setState({ingredients: response.data})
+            }).catch(error => {
+                this.setState({error: true})
+            })
+        console.log("mounted bb")
     }
 
     updatePurchaseState(ingredients) {
@@ -135,21 +143,24 @@ class BurgerBuilder extends Component {
         }
 
         // Show spinner if sending a request, otherwise order summary
-        let orderSummary = <OrderSummary 
-                    ingredients={this.state.ingredients}
-                    purchaseCanceled={this.purchaseCancelHandler}
-                    purchaseContinued={this.purchaseContinueHandler}
-                    price={this.state.totalPrice}
-                    />
-        if (this.state.loading) {
+        let orderSummary = null
+        if (this.state.ingredients && !this.state.loading) {
+            orderSummary = <OrderSummary 
+                        ingredients={this.state.ingredients}
+                        purchaseCanceled={this.purchaseCancelHandler}
+                        purchaseContinued={this.purchaseContinueHandler}
+                        price={this.state.totalPrice}
+                        />
+        }
+        else if (this.state.loading) {
             orderSummary = <Spinner />
         }
 
-        return (
-            <Aux>
-                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
-                    {orderSummary}
-                </Modal>
+        let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner />
+        // Check that we have fetched ingredients list from
+        // DB before trying to display our burger
+        if (this.state.ingredients) {
+            burger = <Aux>
                 <Burger ingredients={this.state.ingredients}/>
                 <BuildControls 
                     ingredientAdded={this.addIngredientHandler}
@@ -159,6 +170,15 @@ class BurgerBuilder extends Component {
                     purchaseable={this.state.purchaseable}
                     ordered={this.purchaseHandler}
                 />
+                </Aux>
+        }
+
+        return (
+            <Aux>
+                <Modal show={this.state.purchasing} modalClosed={this.purchaseCancelHandler}>
+                    {orderSummary}
+                </Modal>
+                {burger}
             </Aux>
         )
     }
