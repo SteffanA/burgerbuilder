@@ -1,27 +1,31 @@
 import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
+import ContactData from './ContactData/ContactData'
 
 // Goal here is to show a summary
 class Checkout extends Component {
     state = { 
-        ingredients: {
-            meat: 1,
-            salad: 1,
-            cheese: 1,
-            bacon: 1,
-        }
+        ingredients: null,
+        totalPrice: 0,
     }
 
-    componentDidMount() {
+    componentWillMount() {
         // Parse our ingredients from the URL
         const query = new URLSearchParams(this.props.location.search)
         const ingredients = {}
+        let price = 0
         for (let param of query.entries()) {
             // Key -> value; ['salad', 1]
-            ingredients[param[0]] = +param[1]
+            if (param[0] === 'price') {
+                price = param[1]
+            } else {
+                ingredients[param[0]] = +param[1]
+            }
         }
         this.setState({
             ingredients: ingredients,
+            totalPrice: price,
         })
     }
 
@@ -41,6 +45,16 @@ class Checkout extends Component {
                     checkoutCancelled={this.checkoutCancelledHandler}
                     checkoutContinue={this.checkoutContinueHandler}
                 />
+                {/* Use render to pass props through the Route
+                Compare to component, which just references the Object
+                and won't let you pass through the ingredients prop
+                */}
+                <Route path={this.props.match.path + '/contact-data'} 
+                render={(props) => ( 
+                    <ContactData ingredients={this.state.ingredients}
+                      totalPrice={this.state.totalPrice}
+                      {...props} />
+                )} />
             </div>
         )
     }
