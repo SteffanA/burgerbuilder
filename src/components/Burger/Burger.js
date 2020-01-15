@@ -2,6 +2,8 @@ import React from 'react'
 import classes from './Burger.module.css'
 import BurgerIngredients from './BurgerIngredients/BurgerIngredients'
 
+// import { withRouter } from 'react-router-dom' // HOC that provides access to Router props
+
 const burger = (props) => {
     // Maps our object into an array of ingredient JSX
     let transformedIngredients = Object.keys(props.ingredients)
@@ -38,3 +40,4 @@ const burger = (props) => {
 }
 
 export default burger;
+// export default withRouter(burger);

@@ -106,31 +106,43 @@ class BurgerBuilder extends Component {
     purchaseContinueHandler = () => {
         // alert('You continue!')
         // Show loading while request happens
-        this.setState({loading: true})
-        const order = {
-            ingredients: this.state.ingredients,
-            // in a real app, calculate price server-side
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Max Schwarzmuller',
-                address: {
-                    street: 'testSt',
-                    zipCode: '34212',
-                    country: 'us',
-                },
-                email: 'test@test.com',
-            },
-            deliveryMethod: 'fastest',
+        // this.setState({loading: true})
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     // in a real app, calculate price server-side
+        //     price: this.state.totalPrice,
+        //     customer: {
+        //         name: 'Max Schwarzmuller',
+        //         address: {
+        //             street: 'testSt',
+        //             zipCode: '34212',
+        //             country: 'us',
+        //         },
+        //         email: 'test@test.com',
+        //     },
+        //     deliveryMethod: 'fastest',
+        // }
+        // // for firebase, need to add .json to end of endpoint
+        // axios.post('/orders.json', order)
+        //     .then(response => {
+        //         // Response recieved, no longer loading, don't display spinner or modal
+        //         this.setState({loading: false, purchasing: false})
+        //     }).catch(error => {
+        //         // Error recieved, no longer loading, don't display spinner or modal
+        //         this.setState({loading: false, purchasing: false})
+        //     })
+        const queryParams = []
+        for (let i in this.state.ingredients) {
+            //Encodes elements such that they can be used in URL
+            queryParams.push(encodeURIComponent(i) + '=' 
+                + encodeURIComponent(this.state.ingredients[i]))
         }
-        // for firebase, need to add .json to end of endpoint
-        axios.post('/orders.json', order)
-            .then(response => {
-                // Response recieved, no longer loading, don't display spinner or modal
-                this.setState({loading: false, purchasing: false})
-            }).catch(error => {
-                // Error recieved, no longer loading, don't display spinner or modal
-                this.setState({loading: false, purchasing: false})
-            })
+
+        const queryString = queryParams.join('&')
+        this.props.history.push({
+            pathname: '/checkout',
+            search: queryString
+        })
     }
 
     render() {
