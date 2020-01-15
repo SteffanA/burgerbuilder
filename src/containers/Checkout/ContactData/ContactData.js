@@ -91,14 +91,43 @@ class ContactData extends Component {
             })
     }
 
+    inputChangedHandler = (event, inputId) => {
+        const updatedOrderForm = {
+            // Not a deep clone of all inner objects
+            ...this.state.orderForm
+        }
+
+        // Deep cloning the form element?
+        const updatedFormElement = { 
+            ...updatedOrderForm[inputId]
+        }
+        updatedFormElement.value = event.target.value
+        updatedOrderForm[inputId] = updatedFormElement
+
+        this.setState({orderForm: updatedOrderForm})
+    }
+
     render() {
+        const formElementsArr = []
+        // Make an array w/ all form elements with a key identifier
+        for (let key in this.state.orderForm) {
+            formElementsArr.push({
+                id: key,
+                config: this.state.orderForm[key],
+            })
+        }
+
         let form = (
             <form>
-                <Input elementtype="..." elementconfig="..." />
-                <Input inputtype="input" type="text" name="name" placeholder="Your name"/>
-                <Input inputtype="input" type="text" name="email" placeholder="Your email"/>
-                <Input inputtype="input" type="text" name="street" placeholder="street name"/>
-                <Input inputtype="input" type="text" name="post" placeholder="Post Code"/>
+                {/* dynamically make our input for ea formElement*/}
+                {formElementsArr.map(formElement => (
+                    <Input elementtype={formElement.config.elementType}
+                        elementConfig={formElement.config.elementConfig}
+                        val={formElement.config.value}
+                        key={formElement.id}
+                        changed={(event) => this.inputChangedHandler(event, formElement.id)}
+                    />
+                ))}
                 <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
             </form>
         )
