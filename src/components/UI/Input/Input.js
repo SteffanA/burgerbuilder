@@ -3,23 +3,28 @@ import classes from './Input.module.css'
 
 const input = (props) => {
     let inputElement = null
+    const inputClasses = [classes.InputElement]
+
+    if (props.invalid && props.shouldValidate && props.touched) {
+        inputClasses.push(classes.Invalid)
+    }
 
     // Use this to make this Input more generic
     switch(props.elementtype) {
         case('input'):
-            inputElement = <input className={classes.InputElement} 
+            inputElement = <input className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
                 val={props.val}
                 onChange={props.changed}/>
             break
         case('textarea'):
-            inputElement = <textarea className={classes.InputElement} 
+            inputElement = <textarea className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
                 val={props.val}
                 onChange={props.changed}/>
             break
         case('select'):
-            inputElement = <select className={classes.InputElement}
+            inputElement = <select className={inputClasses.join(' ')}
                 val={props.val}
                 
                 onChange={props.changed}>
@@ -31,7 +36,7 @@ const input = (props) => {
                 </select>
             break;
         default:
-            inputElement = <input className={classes.InputElement} 
+            inputElement = <input className={inputClasses.join(' ')} 
                 {...props.elementConfig} 
                 val={props.val}
                 onChange={props.changed}/>
