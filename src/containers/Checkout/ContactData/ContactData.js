@@ -4,6 +4,7 @@ import classes from './ContactData.module.css'
 import axios from '../../../axios-orders'
 import Spinner from '../../../components/UI/Spinner/Spinner'
 import Input from '../../../components/UI/Input/Input'
+import { connect } from 'react-redux'
 
 class ContactData extends Component {
     state = {
@@ -100,7 +101,7 @@ class ContactData extends Component {
 
     orderHandler = (event) => {
         event.preventDefault() // stop from refreshing page
-        console.log(this.props.ingredients)
+        console.log(this.props.ings)
         // Show loading while request happens
         this.setState({loading: true})
         const formData = {}
@@ -109,9 +110,9 @@ class ContactData extends Component {
             formData[formElemID] = this.state.orderForm[formElemID].value
         }
         const order = {
-            ingredients: this.props.ingredients,
+            ingredients: this.props.ings,
             // in a real app, calculate price server-side
-            price: this.props.totalPrice,
+            price: this.props.price,
             orderData: formData
         }
         // for firebase, need to add .json to end of endpoint
@@ -214,4 +215,11 @@ class ContactData extends Component {
     }
 }
 
-export default ContactData;
+const mapStateToProps = state => {
+    return {
+        ings: state.ingredients,
+        price: state.totalPrice,
+    }
+}
+
+export default connect(mapStateToProps)(ContactData);
