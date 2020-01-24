@@ -29,10 +29,16 @@ export const purchaseBurger= (orderData) => {
         axios.post('/orders.json', orderData)
             .then(response => {
                 // Response recieved, no longer loading, don't display spinner or modal
-                dispatch(purchaseBurgerSuccess(response.data, orderData))
+                dispatch(purchaseBurgerSuccess(response.data.name, orderData))
             }).catch(error => {
                 // Error recieved, no longer loading, don't display spinner or modal
                 dispatch(purchaseBurgerFail(error))
             })
+    }
+}
+
+export const purchaseInit = () => {
+    return {
+        type: actionTypes.PURCHASE_INIT,
     }
 }
