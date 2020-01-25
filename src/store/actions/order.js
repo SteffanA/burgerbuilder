@@ -42,3 +42,47 @@ export const purchaseInit = () => {
         type: actionTypes.PURCHASE_INIT,
     }
 }
+
+export const fetchOrdersSuccess = (orders) =>{
+    return {
+        type: actionTypes.FETCH_ORDERS_SUCCESS,
+    }
+}
+
+export const fetchOrdersFail = (error) =>{
+    return {
+        type: actionTypes.FETCH_ORDERS_FAIL,
+    }
+}
+
+export const fetchOrdersStart = () => {
+    return {
+        type: actionTypes.FETCH_ORDERS_START,
+    }
+}
+
+export const fetchOrders = () => {
+    return dispatch => {
+        dispatch(fetchOrdersStart())
+        // Fetch our orders
+        axios.get('orders.json')
+            .then(res => {
+                // Remember, JS const arr is a constant arr
+                // but the values within/contents as a whole
+                // aren't.
+                // Doing data formatting in action creator
+                // such that our reducer knows what it gets
+                const fetchedOrders = []
+                for (let key in res.data) {
+                    fetchedOrders.push({
+                        ...res.data[key],
+                        id: key
+                    })
+                }
+                dispatch(fetchOrdersSuccess(fetchedOrders))
+            })
+            .catch(error => {
+                dispatch(fetchOrdersFail(error))
+            })
+    }
+}

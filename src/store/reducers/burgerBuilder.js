@@ -38,6 +38,7 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 ingredients: action.ingredients,
                 error: false,
+                totalPrice: 4, // Grab from server in real app
             }
         case actionTypes.FETCH_INGREDIENTS_FAILED:
             return {

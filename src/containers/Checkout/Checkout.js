@@ -8,10 +8,6 @@ import * as actions from '../../store/actions/actionTypes'
 // Goal here is to show a summary
 class Checkout extends Component {
 
-    componentWillMount() {
-        this.props.onInitPurchase()
-    }
-
     checkoutCancelledHandler = () => {
         this.props.history.goBack()
     }
@@ -25,7 +21,7 @@ class Checkout extends Component {
         // else show the summary
         let summary = <Redirect to='/' />
         if (this.props.ings) {
-            const purchasedRedirect = state.props.purchased ? <Redirect to='/' /> : null
+            const purchasedRedirect = this.props.purchased ? <Redirect to='/' /> : null
             summary = (
                 <div>
                     {purchasedRedirect}
@@ -55,11 +51,5 @@ const mapStateToProps = state => {
     }
 }
 
-const mapDispatchToProps = dispatch => {
-    return {
-        onInitPurchase: () => dispatch(actions.PURCHASE_INIT()),
-    }
-}
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(Checkout);
+export default connect(mapStateToProps)(Checkout);
