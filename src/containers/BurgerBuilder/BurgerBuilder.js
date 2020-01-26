@@ -4,31 +4,21 @@ import Burger from '../../components/Burger/Burger'
 import BuildControls from '../../components/Burger/BuildControls/BuildControls'
 import Modal from '../../components/UI/Modal/Modal'
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary'
-import axios from '../../axios-orders'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import withErrorHandler from  '../../hoc/withErrorHandler/withErrorHandler'
+import axios from '../../axios-orders'
 import { connect } from 'react-redux'
-import * as actionTypes from '../../store/actions'
-
+import * as burgerBuilderActions from '../../store/actions' // implicit index import
 
 
 class BurgerBuilder extends Component {
     state = {
         purchasing: false,
-        loading: false,
-        error: false
     }
 
     componentDidMount() {
-        // Get our ingredients list dynamically from our database when we
-        // mount the burger builder
-        // axios.get('/ingredients.json')
-        //     .then(response => {
-        //         this.setState({ingredients: response.data})
-        //     }).catch(error => {
-        //         this.setState({error: true})
-        //     })
         // console.log("mounted bb")
+        this.props.onInitIngredients()
     }
 
     updatePurchaseState(ingredients) {
@@ -56,6 +46,7 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
+        this.props.onInitPurchase()
         this.props.history.push({
             pathname: '/checkout',
         })
@@ -80,11 +71,8 @@ class BurgerBuilder extends Component {
                         price={this.props.totalPrice}
                         />
         }
-        else if (this.state.loading) {
-            orderSummary = <Spinner />
-        }
 
-        let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner />
+        let burger = this.props.error ? <p>Ingredients can't be loaded</p> : <Spinner />
         // Check that we have fetched ingredients list from
         // DB before trying to display our burger
         if (this.props.ings) {
@@ -114,15 +102,18 @@ class BurgerBuilder extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        ings: state.ingredients,
-        totalPrice: state.totalPrice,
+        ings: state.burgerBuilder.ingredients,
+        totalPrice: state.burgerBuilder.totalPrice,
+        error: state.burgerBuilder.error,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onIngredientAdded: (ingName) => dispatch({type: actionTypes.ADD_INGREDIENT, ingredientName: ingName}),
-        onIngredientRemoved: (ingName) => dispatch({type: actionTypes.REMOVE_INGREDIENT, ingredientName: ingName}),
+        onIngredientAdded: (ingName) => dispatch(burgerBuilderActions.addIngredient(ingName)),
+        onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName)),
+        onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients()),
+        onInitPurchase: () => dispatch(burgerBuilderActions.purchaseInit()),
     }
 
 }

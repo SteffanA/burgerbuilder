@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary'
 import ContactData from './ContactData/ContactData'
 import { connect } from 'react-redux'
+import * as actions from '../../store/actions/actionTypes'
 
 // Goal here is to show a summary
 class Checkout extends Component {
+
     checkoutCancelledHandler = () => {
         this.props.history.goBack()
     }
@@ -15,30 +17,39 @@ class Checkout extends Component {
     }
 
     render() {
-        return (
-            <div>
-                <CheckoutSummary 
-                    ingredients={this.props.ings} 
-                    checkoutCancelled={this.checkoutCancelledHandler}
-                    checkoutContinue={this.checkoutContinueHandler}
-                />
-                {/* Use render to pass props through the Route
-                Compare to component, which just references the Object
-                and won't let you pass through the ingredients prop
-                */}
-                <Route path={this.props.match.path + '/contact-data'} 
-                component={ContactData}
-                 />
-            </div>
-        )
+        // Redirect to home page if we have no ingredients,
+        // else show the summary
+        let summary = <Redirect to='/' />
+        if (this.props.ings) {
+            const purchasedRedirect = this.props.purchased ? <Redirect to='/' /> : null
+            summary = (
+                <div>
+                    {purchasedRedirect}
+                    <CheckoutSummary 
+                        ingredients={this.props.ings} 
+                        checkoutCancelled={this.checkoutCancelledHandler}
+                        checkoutContinue={this.checkoutContinueHandler}
+                    />
+                    {/* Use render to pass props through the Route
+                    Compare to component, which just references the Object
+                    and won't let you pass through the ingredients prop
+                    */}
+                    <Route path={this.props.match.path + '/contact-data'} 
+                    component={ContactData}
+                    />
+                 </div>
+            )
+        }
+        return summary
     }
 }
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
+        ings: state.burgerBuilder.ingredients,
+        purchased: state.order.purchased,
     }
 }
 
 
-export default connect(mapStateToProps, null)(Checkout);
+export default connect(mapStateToProps)(Checkout);

@@ -1,16 +1,3 @@
-What is this application?
-    This is a app to display a dynamic map for the local office so employee's can see other's locations and meeting rooms.
-
-    This application already exists internally, but it hasn't been updated since the early 2000s.
-
-    Some reasons for an update:
-        - Compatibility with modern browsers (Chrome/FF/Edge)
-        - An easier way to update employee locations
-            - Rather than using a complete database backend, which has caused issues for
-            IT to update down the line, this will simply read some CSV file stored with
-            the react application.  This is not as scalable, but makes long-term use simpler
-            and requires less dependancies and complexity.
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

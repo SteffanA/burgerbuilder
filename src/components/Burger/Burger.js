@@ -6,6 +6,14 @@ import BurgerIngredients from './BurgerIngredients/BurgerIngredients'
 
 const burger = (props) => {
     // Maps our object into an array of ingredient JSX
+    if (props.ingredients === null) {
+        return (
+            <div className={classes.Burger}>
+                <BurgerIngredients type="bread-top"/>
+                <BurgerIngredients type="bread-bottom"/>
+            </div>
+        )
+    }
     let transformedIngredients = Object.keys(props.ingredients)
         .map(igKey => {
             console.log("first map for transformed, igKey ", igKey)
