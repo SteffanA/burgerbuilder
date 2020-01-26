@@ -8,6 +8,7 @@ import { createStore, applyMiddleware, compose, combineReducers } from 'redux'
 import { BrowserRouter} from 'react-router-dom'
 import burgerBuilderReducer from './store/reducers/burgerBuilder'
 import orderReducer from './store/reducers/order'
+import authReducer from './store/reducers/auth'
 import thunk from 'redux-thunk'
 
 // This piece is provided on the GitHub page for redux dev-tools
@@ -16,6 +17,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const rootReducer = combineReducers({
   burgerBuilder: burgerBuilderReducer,
   order: orderReducer,
+  auth: authReducer,
 })
 
 const store = createStore(rootReducer, composeEnhancers(
