@@ -67,7 +67,7 @@ export const fetchOrders = (token, userId) => {
     return dispatch => {
         dispatch(fetchOrdersStart())
         // Fetch our orders
-        const queryParams = '?auth=' + token + '&orderById="userId"&equalTo="' + userId + '"'
+        const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"'
         axios.get('orders.json' + queryParams)
             .then(res => {
                 // Remember, JS const arr is a constant arr
