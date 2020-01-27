@@ -63,11 +63,12 @@ export const fetchOrdersStart = () => {
     }
 }
 
-export const fetchOrders = (token) => {
+export const fetchOrders = (token, userId) => {
     return dispatch => {
         dispatch(fetchOrdersStart())
         // Fetch our orders
-        axios.get('orders.json?auth=' + token)
+        const queryParams = '?auth=' + token + '&orderById="userId"&equalTo="' + userId + '"'
+        axios.get('orders.json' + queryParams)
             .then(res => {
                 // Remember, JS const arr is a constant arr
                 // but the values within/contents as a whole
