@@ -16,11 +16,9 @@ const burger = (props) => {
     }
     let transformedIngredients = Object.keys(props.ingredients)
         .map(igKey => {
-            console.log("first map for transformed, igKey ", igKey)
             return [...Array(props.ingredients[igKey])].map((_, i) => {
                     // currently have [smth,smth]
                     // Map the key, which is the ingredient, i is index.
-                    console.log("internal map for transformed, _" + _ + ' i ' + i)
                     return (<BurgerIngredients key={igKey + i} type={igKey} />)
                 })
         }).reduce((arr, el) => {
@@ -31,7 +29,6 @@ const burger = (props) => {
                 arr.concat(el)
             )
         }, []) //second arg is the default return value, an empty array in this instance
-    console.log("transformed finally is: ", transformedIngredients)
 
     // Output a message if no ingredients passed
     if (transformedIngredients.length === 0) {

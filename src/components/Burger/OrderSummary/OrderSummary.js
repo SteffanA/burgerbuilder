@@ -5,11 +5,6 @@ import Button from '../../UI/Button/Button'
 class OrderSummary extends Component {
     // This could be a functional component, doesn't need to be class
 
-    // Using this to check when this component gets updated
-    componentDidUpdate() {
-        console.log('[OrderSummary] updated')
-    }
-    
     render() {
         // Map ingredients into a list of ingredient: amt
         const ingredientSummary = Object.keys(this.props.ingredients)

@@ -90,12 +90,8 @@ export const auth = (email, password, isSignUp) => {
             url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='
         }
         const apiKey = url + process.env.REACT_APP_APIKEY
-        // apiKey = apiKey.concat(process.env.REACT_APP_APIKEY)
-        // console.log(apiKey)
-        // console.log("api key is ", process.env.REACT_APP_APIKEY)
         axios.post(apiKey, authData)
             .then(response => {
-                console.log(response)
                 const expirationDate = new Date(new Date().getTime() + (response.data.expiresIn * 1000))
                 localStorage.setItem('token', response.data.idToken)
                 localStorage.setItem('expirationDate', expirationDate)
@@ -105,7 +101,6 @@ export const auth = (email, password, isSignUp) => {
                 dispatch(checkAuthTimeout(response.data.expiresIn))
             })
             .catch(err => {
-                console.log(err)
                 dispatch(authFail(err.response.data.error))
             })
     }

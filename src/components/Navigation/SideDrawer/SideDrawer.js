@@ -13,7 +13,8 @@ const sideDrawer = (props) => {
     return (
         <Aux>
             <Backdrop  show={props.open} clicked={props.closed}/>
-            <div className={attatchedClasses.join(' ')}>
+            {/* Click anywhere and the side drawer will close*/}
+            <div className={attatchedClasses.join(' ')} onClick={props.closed}>
                 <div className={classes.Logo}>
                     <Logo />
                 </div>

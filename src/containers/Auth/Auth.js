@@ -6,6 +6,7 @@ import * as actions from '../../store/actions/index'
 import { connect } from 'react-redux'
 import Spinner from '../../components/UI/Spinner/Spinner'
 import { Redirect } from 'react-router-dom'
+import { updateObject, checkValidity } from '../../shared/utility'
 
 class Auth extends Component {
     state = {
@@ -51,42 +52,15 @@ class Auth extends Component {
         }
     }
 
-    checkValidity(value, rules) {
-        let isValid = false
-        if (!rules) {
-            return true;
-        }
-        if (rules.required) {
-            isValid = value.trim() !== ''
-        }
-
-        if (rules.minLength) {
-            isValid &= value.trim().length >= rules.minLength
-        }
-
-        if (rules.maxLength) {
-            isValid &= value.trim().length <= rules.maxLength
-        }
-
-        if (rules.isEmail) {
-            // Can add the regex here later
-            isValid &= true
-        }
-
-        return isValid;
-    }
 
     inputChangedHandler = (event, controlName) => {
-        const updatedControls = {
-            // Not a deep clone of all inner objects
-            ...this.state.controls,
-            [controlName]: {
-                ...this.state.controls[controlName],
+        const updatedControls = updateObject(this.state.controls, {
+            [controlName]: updateObject(this.state.controls[controlName], {
                 value: event.target.value,
-                valid: this.checkValidity(event.target.value, this.state.controls[controlName].validation),
+                valid: checkValidity(event.target.value, this.state.controls[controlName].validation),
                 touched: true,
-            },
-        }
+            })
+        })
 
         this.setState({controls: updatedControls})
     }
@@ -95,8 +69,6 @@ class Auth extends Component {
         // Prevent page reload
         event.preventDefault()
         this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignup)
-        // console.log(this.state.controls.email.value)
-        // console.log(this.state.controls.password.value)
     }
 
     switchAuthModeHandler = () => {
