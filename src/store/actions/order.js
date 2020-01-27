@@ -22,11 +22,11 @@ export const purchaseBurgerStart = () => {
     }
 }
 
-export const purchaseBurger= (orderData) => {
+export const purchaseBurger= (orderData, token) => {
     return dispatch => {
         dispatch(purchaseBurgerStart())
         // for firebase, need to add .json to end of endpoint
-        axios.post('/orders.json', orderData)
+        axios.post('/orders.json?auth=' + token, orderData)
             .then(response => {
                 // Response recieved, no longer loading, don't display spinner or modal
                 dispatch(purchaseBurgerSuccess(response.data.name, orderData))
@@ -63,11 +63,11 @@ export const fetchOrdersStart = () => {
     }
 }
 
-export const fetchOrders = () => {
+export const fetchOrders = (token) => {
     return dispatch => {
         dispatch(fetchOrdersStart())
         // Fetch our orders
-        axios.get('orders.json')
+        axios.get('orders.json?auth=' + token)
             .then(res => {
                 // Remember, JS const arr is a constant arr
                 // but the values within/contents as a whole
