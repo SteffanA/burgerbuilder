@@ -36,7 +36,14 @@ class BurgerBuilder extends Component {
     // Note we need this to be () =>, not a simple ()
     // This is because a () will cause this to refer to possibly a different class
     purchaseHandler = () => {
-        this.setState({purchasing: true})
+        if (this.props.isAuthenticated) {
+            this.setState({purchasing: true})
+        }
+        else {
+            this.props.onSetRedirectPath('/checkout')
+            // Redirect to sign up
+            this.props.history.push('/auth')
+        }
     }
 
     // When we click on the backdrop & close the order modal,
@@ -85,6 +92,7 @@ class BurgerBuilder extends Component {
                     price={this.props.totalPrice}
                     purchaseable={this.updatePurchaseState(this.props.ings)}
                     ordered={this.purchaseHandler}
+                    isAuth={this.props.isAuthenticated}
                 />
                 </Aux>
         }
@@ -105,6 +113,7 @@ const mapStateToProps = (state) => {
         ings: state.burgerBuilder.ingredients,
         totalPrice: state.burgerBuilder.totalPrice,
         error: state.burgerBuilder.error,
+        isAuthenticated: state.auth.token !== null,
     }
 }
 
@@ -114,6 +123,7 @@ const mapDispatchToProps = (dispatch) => {
         onIngredientRemoved: (ingName) => dispatch(burgerBuilderActions.removeIngredient(ingName)),
         onInitIngredients: () => dispatch(burgerBuilderActions.initIngredients()),
         onInitPurchase: () => dispatch(burgerBuilderActions.purchaseInit()),
+        onSetRedirectPath: (path) => dispatch(burgerBuilderActions.setAuthRedirectPath(path))
     }
 
 }
