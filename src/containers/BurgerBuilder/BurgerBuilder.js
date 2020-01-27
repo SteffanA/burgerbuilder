@@ -10,8 +10,9 @@ import axios from '../../axios-orders'
 import { connect } from 'react-redux'
 import * as burgerBuilderActions from '../../store/actions' // implicit index import
 
-
-class BurgerBuilder extends Component {
+// Export the class so it's exposed for testing
+// even though it's wrapped when we use it
+export class BurgerBuilder extends Component {
     state = {
         purchasing: false,
     }
